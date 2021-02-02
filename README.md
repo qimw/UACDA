@@ -88,6 +88,10 @@ As there are many training steps in our pipeline, we manage our training procedu
 
 Coming soon ...
 
+## Results
+
+![Pipeline](./readme_imgs/result.png)
+
 ## Related Works
 We also would like to thank great works as follows:
 
