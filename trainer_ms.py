@@ -187,7 +187,7 @@ class AD_Trainer(nn.Module):
         else:
             loss.backward()
 
-    def gen_update(self, images, images_t, labels, i_iter):
+    def gen_update(self, images, images_t, labels, i_iter, iter_size, sub_iter):
             images = images.cuda()
             labels = labels.cuda()
             self.gen_opt.zero_grad()
@@ -247,9 +247,13 @@ class AD_Trainer(nn.Module):
                     mean_pred = self.sm(0.5*pred_target1 + pred_target2) 
                 loss_kl = ( self.kl_loss(self.log_sm(pred_target2) , mean_pred)  + self.kl_loss(self.log_sm(pred_target1) , mean_pred))/(n*h*w)
                 loss += self.lambda_kl_target * loss_kl
+            loss = loss / iter_size
             self.update_loss(loss)
-
-            self.gen_opt.step()
+            if sub_iter+1 == iter_size:
+                self.gen_opt.step()
+                print('update')
+            else:
+                print('continue')
 
             return loss_seg1, loss_seg2, loss_adv_target1, loss_adv_target2, loss_me, loss_kl, pred1, pred2, pred_target1, pred_target2
     

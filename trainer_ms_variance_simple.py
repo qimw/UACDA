@@ -257,7 +257,7 @@ class AD_Trainer(nn.Module):
 
             self.gen_opt.step()
             zero_loss = torch.zeros(1).cuda()
-            return loss_seg1_t, loss_seg2_t, zero_loss, zero_loss, zero_loss, zero_loss, pred1, pred2, None, None
+            return loss_seg1, loss_seg2, loss_seg1_t, loss_seg2_t, zero_loss, zero_loss, zero_loss, zero_loss, pred1, pred2, None, None
     
     def dis_update(self, pred1, pred2, pred_target1, pred_target2):
             self.dis1_opt.zero_grad()

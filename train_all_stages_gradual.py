@@ -25,21 +25,22 @@ This pipeline is easy to understand:
 
 gpu_ids = '0'
 input_size = '1024,512'
-ft_step = 7500
-outdir = 'gradual_20000'
+crop_size = '1024,512'
+ft_step = 5000
+outdir = 'gradual'
 
 # --------------------------- Base args ---------------------------
 # Align base args for first step
-align_args = 'python train_ms.py  --tensorboard \
+align_args = 'python train_ms.py  --tensorboard  \
 --drop 0.1 --batch-size 2 --iter-size 1 --lambda-seg 0.5  --lambda-adv-target1 \
 0.0002 --lambda-adv-target2 0.001   --lambda-me-target 0  --lambda-kl-target 0.1  --norm-style gn  --class-balance  \
 --only-hard-label -1  --max-value 7  --often-balance  --use-se  --save-pred-every 2500 \
---crop-size %s --input-size %s --input-size-target %s --gpu-ids %s ' % (input_size, input_size, input_size, gpu_ids)
+--crop-size %s --input-size %s --input-size-target %s --gpu-ids %s ' % (crop_size, input_size, input_size, gpu_ids)
 # Rectify base args for second and third step
 rectify_args = align_args + ' --learning-rate 1e-5  --kl-warm-up 0 --num-steps %s ' % (ft_step)
 # Fintune base args
 ft_args = 'python train_ft.py --tensorboard \
---droprate 0.2 --warm-up 500 --batch-size 6 --learning-rate 1e-4 --crop-size 512, 256 --lambda-seg 0.5 \
+--droprate 0.2 --warm-up 500 --batch-size 6 --learning-rate 1e-4 --crop-size 512,256 --lambda-seg 0.5 \
 --lambda-adv-target1 0 --lambda-adv-target2 0 --lambda-me-target 0 --lambda-kl-target 0 --norm-style gn \
 --class-balance --only-hard-label -1 --max-value 7 --often-balance  --use-se \
 --input-size 1024,612  --train_bn  --autoaug False  --num-steps %s  --save-pred-every 2500 --gpu-ids %s \

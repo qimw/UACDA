@@ -298,7 +298,7 @@ def main():
             # images_t = images_t.cuda()
 
             with Timer("Elapsed time in update: %f"):
-                loss_seg1, loss_seg2, loss_adv_target1, loss_adv_target2, loss_me, loss_kl, pred1, pred2, pred_target1, pred_target2 = Trainer.gen_update(images, images_t, labels, i_iter)
+                loss_seg1, loss_seg2, loss_adv_target1, loss_adv_target2, loss_me, loss_kl, pred1, pred2, pred_target1, pred_target2 = Trainer.gen_update(images, images_t, labels, i_iter, args.iter_size, sub_i)
                 loss_seg_value1 += loss_seg1.item() / args.iter_size
                 loss_seg_value2 += loss_seg2.item() / args.iter_size
                 loss_adv_target_value1 += loss_adv_target1 / args.iter_size

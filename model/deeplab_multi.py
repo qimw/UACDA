@@ -187,7 +187,6 @@ class Classifier_Module(nn.Module):
         for i in range(len(self.conv2d_list) - 1):
             out = torch.cat( (out, self.conv2d_list[i+1](x)), 1)
         out = self.bottleneck(out)
-        print(out.shape)
         out = self.head(out)
         return out
 

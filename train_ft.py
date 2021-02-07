@@ -272,10 +272,12 @@ def main():
         loss_seg_value1 = 0
         loss_adv_target_value1 = 0
         loss_D_value1 = 0
+        loss_seg_t_value1 = 0
 
         loss_seg_value2 = 0
         loss_adv_target_value2 = 0
         loss_D_value2 = 0
+        loss_seg_t_value2 = 0
 
 
         adjust_learning_rate(Trainer.gen_opt , i_iter, args)
@@ -295,9 +297,11 @@ def main():
             images_t, labels_t, _, _ = batch_t
 
             with Timer("Elapsed time in update: %f"):
-                loss_seg1, loss_seg2, loss_adv_target1, loss_adv_target2, loss_me, loss_kl, pred1, pred2, pred_target1, pred_target2 = Trainer.gen_update(images, images_t, labels, labels_t, i_iter)
+                loss_seg1, loss_seg2, loss_seg1_t, loss_seg2_t, loss_adv_target1, loss_adv_target2, loss_me, loss_kl, pred1, pred2, pred_target1, pred_target2 = Trainer.gen_update(images, images_t, labels, labels_t, i_iter)
                 loss_seg_value1 += loss_seg1.item() / args.iter_size
                 loss_seg_value2 += loss_seg2.item() / args.iter_size
+                loss_seg_t_value1 += loss_seg1_t.item() / args.iter_size
+                loss_seg_t_value2 += loss_seg2_t.item() / args.iter_size
                 loss_adv_target_value1 += loss_adv_target1 / args.iter_size
                 loss_adv_target_value2 += loss_adv_target2 / args.iter_size
                 loss_me_value = loss_me
@@ -316,6 +320,8 @@ def main():
             scalar_info = {
                 'loss_seg1': loss_seg_value1,
                 'loss_seg2': loss_seg_value2,
+                'loss_seg1_t': loss_seg_t_value1,
+                'loss_seg2_t': loss_seg_t_value2,
                 'loss_adv_target1': loss_adv_target_value1,
                 'loss_adv_target2': loss_adv_target_value2,
                 'loss_me_target': loss_me_value,
